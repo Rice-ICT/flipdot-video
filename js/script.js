@@ -1,12 +1,16 @@
+// adjusted the file to make a flipboard that displays a video file input by the user
+// ai prompt used: "adjust the following code to make a flipboard that displays a video file input by the user instead of a random pattern"
 //Setting up variables for our display
 const flipboard_display_size = [84, 28] //amount of columns,rows
 const flipboard_dots_array = [] //an array for all the dots
 const flipboard_element = document.querySelector("section") //reference to the HTML flipboard container
-const video_element = document.querySelector("video") //reference to the HTML video container
-const canvas_element = document.querySelector("canvas") //reference to the HTML canvas container
-const canvas_context = canvas_element.getContext("2d") //get the 2D context of the canvas
+const video_element = document.querySelector("video"); //reference to the HTML video container
+const canvas_element = document.querySelector("canvas"); //reference to the HTML canvas container
+const canvas_context = canvas_element.getContext("2d"); //get the 2D context of the canvas
 
-console.log(canvas_context)
+const fileInput = document.getElementById("videoFileInput");
+
+console.log(canvas_context);
 
 //Set the amount of columns in our CSS
 flipboard_element.style.setProperty("--amount-of-columns", flipboard_display_size[0])
@@ -56,13 +60,24 @@ const update_dots = () => {
         }
     }}
 
-navigator.mediaDevices.getUserMedia({ video:{width:640, height:360}, audio: false }).then((videostream) => {
-    console.log(videostream)
-    video_element.srcObject = videostream
-    video_element.play()
-    setInterval(() => {
-        canvas_context.drawImage(video_element, 0, 0, 640, 360)
-}, 1000/15)}) //drawing the video on the canvas 15 times a second
+
+// --- Video File Input Handler ---
+fileInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        video_element.srcObject = null;
+        video_element.src = URL.createObjectURL(file);
+        video_element.load();
+        video_element.play();
+    }
+});
+
+// Draw video to canvas for flipboard
+setInterval(() => {
+    if (!video_element.paused && !video_element.ended && video_element.readyState >= 2) {
+        canvas_context.drawImage(video_element, 0, 0, 640, 360);
+    }
+}, 1000 / 15);
 
 
 //There is 2 timing functions, one to run once and one to run at an interval

@@ -8,15 +8,14 @@
     <script src="js/script.js" defer></script>
 </head>
 <body>
-    <section>
-        
-    </section>
-    <video>
-
-    </video>
-    <canvas width="640" height="360">
-        Your browser does not support the HTML5 canvas tag.
-
-    </canvas>
+    <div style="display: flex; flex-direction: column; gap: 10px; align-items: center; margin-bottom: 20px;">
+        <label>
+            Select video file:
+            <input type="file" id="videoFileInput" accept="video/*">
+        </label>
+    </div>
+    <section></section>
+    <video style="display:none;"></video>
+    <canvas width="640" height="360">Your browser does not support the HTML5 canvas tag.</canvas>
 </body>
 </html>
